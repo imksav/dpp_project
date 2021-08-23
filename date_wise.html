@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+
+<body>
+   <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+   <script src="https://cdn.anychart.com/releases/8.0.0/themes/dark_earth.min.js" type="text/javascript"></script>
+   <script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <script src="https://momentjs.com/downloads/moment.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script>
+      $(document).ready(function () {
+         $.ajax({
+            type: "GET",
+            url: "datetime.csv",
+            dataType: "text",
+            success: async function (data) {
+               let datetime = data.split("\r\n");
+               // console.log(datetime.length);
+               // console.log(datetime);
+               let details = [];
+               let count = 0
+               for (let i = 0; i < datetime.length; i++) {
+                  let time = datetime[i].split(":");
+
+                  let date = time[0].split("/");
+                  let temp = `${date[2]}  ${getMonthFromString(date[1])}  ${date[0]}`
+                  let final = moment(temp).format("dddd");
+                  time = time[1]
+
+                  if (time !== undefined && final !== "Invalid date") {
+                     details[count] = { day: final, time }
+                     count++
+                  }
+               }
+
+               console.log(details)
+               let newarrayoftime = details.filter((thing, index, self) =>
+                  index === self.findIndex((t) => (
+                     t.time === thing.time && t.day === thing.day
+                  ))
+               )
+               let newarrayofday = details.filter((thing, index, self) =>
+                  index === self.findIndex((t) => (
+                     t.day === thing.day
+                  ))
+               )
+
+               console.log(newarrayoftime)
+               console.log(newarrayofday)
+
+               let fi = [];
+               for (let p = 0; p < newarrayoftime.length; p++) {
+                  let t = ["", "", 0];
+
+                  t[0] = newarrayoftime[p].day;
+                  t[1] = newarrayoftime[p].time;
+
+                  let num = details.filter(det => {
+                     return (det.day === t[0] && det.time === t[1])
+                  }).length
+
+                  t[2] = num;
+
+                  fi.push(t)
+               }
+
+               console.log(fi)
+
+
+
+
+               // google.charts.load('current', { 'packages': ['bar'] });
+               // google.charts.setOnLoadCallback(drawChart);
+
+               // function drawChart() {
+               // var data = google.visualization.arrayToDataTable([
+               // ['Day', 'Time', 'Count'],
+               // ...fi
+               // ]);
+
+               // var options = {
+               // chart: {
+               // title: 'Company Performance',
+               // subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+               // },
+               // bars: 'horizontal' // Required for Material Bar Charts.
+               // };
+
+               // var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+               // chart.draw(data, google.charts.Bar.convertOptions(options));
+               // }
+            }
+         });
+      });
+      function getMonthFromString(mon) {
+         return new Date(Date.parse(mon + " 1, 2012")).getMonth() + 1
+      }
+   </script>
+
+</body>
+
+</html>
