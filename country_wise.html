@@ -24,7 +24,7 @@
                let ipaddress = data.split("\r\n");
                let details = [];
 
-               for (let i = 0; i < 300; i++) {
+               for (let i = 0; i < 100; i++) {
                   let resp = await fetch(`http://geoip-db.com/json/${ipaddress[i]}`, { method: "GET" }).then(res => res.json())
                   details[i] = resp;
                }
