@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Operating System - Users</title>
+</head>
+
+<body>
+   <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+   <script src="https://cdn.anychart.com/releases/8.0.0/themes/dark_earth.min.js" type="text/javascript"></script>
+   <script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <script src="https://momentjs.com/downloads/moment.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script>
+      $(document).ready(function () {
+         $.ajax({
+            type: "GET",
+            url: "os.csv",
+            dataType: "text",
+            success: async function (data) {
+               let os = data.split(",");
+               console.log(os.length);
+               console.log(os);
+
+               // Bar chart
+               new Chart(document.getElementById("doughnut-chart"), {
+                  type: 'doughnut',
+                  data: {
+                     labels: [os[0], os[2]],
+                     datasets: [
+                        {
+                           label: "Number of users",
+                           backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                           data: [os[1], os[3]]
+                        }
+                     ]
+                  },
+                  options: {
+                     title: {
+                        display: true,
+                        text: 'Users By Operating System'
+                     }
+                  }
+               });
+            }
+         });
+      });
+   </script>
+
+</body>
+<canvas id="doughnut-chart" width="100" height="20" style="padding: 20px;"></canvas>
+
+</html>

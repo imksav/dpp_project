@@ -5,7 +5,7 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Document</title>
+   <title>Date and Time - Users</title>
 </head>
 
 <body>
@@ -68,38 +68,41 @@
                   let num = details.filter(det => {
                      return (det.day === t[0] && det.time === t[1])
                   }).length
-
                   t[2] = num;
-
                   fi.push(t)
                }
+               console.log(fi);
+               // for chart
+               let fridayCount = 0;
+               for (let friday = 0; friday <= 17; friday++) {
+                  fridayCount += fi[friday][2];
+               }
+               let saturdayCount = 0;
+               for (let saturday = 18; saturday <= 24; saturday++) {
+                  saturdayCount += fi[saturday][2];
+               }
+               // Bar chart
+               new Chart(document.getElementById("bar-chart"), {
+                  type: 'bar',
+                  data: {
+                     labels: ["Friday", "Saturday"],
+                     datasets: [
+                        {
+                           label: "Number of users",
+                           backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
 
-               console.log(fi)
-
-
-
-
-               // google.charts.load('current', { 'packages': ['bar'] });
-               // google.charts.setOnLoadCallback(drawChart);
-
-               // function drawChart() {
-               // var data = google.visualization.arrayToDataTable([
-               // ['Day', 'Time', 'Count'],
-               // ...fi
-               // ]);
-
-               // var options = {
-               // chart: {
-               // title: 'Company Performance',
-               // subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-               // },
-               // bars: 'horizontal' // Required for Material Bar Charts.
-               // };
-
-               // var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-               // chart.draw(data, google.charts.Bar.convertOptions(options));
-               // }
+                           data: [fridayCount, saturdayCount]
+                        }
+                     ]
+                  },
+                  options: {
+                     legend: { display: false },
+                     title: {
+                        display: true,
+                        text: 'Users By Date and Time'
+                     }
+                  }
+               });
             }
          });
       });
@@ -107,6 +110,7 @@
          return new Date(Date.parse(mon + " 1, 2012")).getMonth() + 1
       }
    </script>
+   <canvas id="bar-chart" width="1000" height="350"></canvas>
 
 </body>
 

@@ -8,13 +8,13 @@ def access_log_reader(logfile):
 
     with open(logfile) as f:
         log = f.read()
-        my_iplist = re.findall(myregex, log)
-        ipcount = Counter(my_iplist)
-        for k, v in ipcount.items():
+        my_datelist = re.findall(myregex, log)
+        datecount = Counter(my_datelist)
+        for k, v in datecount.items():
             print("Date and Time " + "=> " + str(k) +
                   " " + "Count " + "=> " + str(v))
         with open('datetime.csv', 'w') as f:
-            for k, v in ipcount.items():
+            for k, v in datecount.items():
                 f.write(str(k) + "\n")
 
 
